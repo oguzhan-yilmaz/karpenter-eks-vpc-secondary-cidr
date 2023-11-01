@@ -289,7 +289,7 @@ kubectl get eniconfig ${AZ3} -o yaml; echo "---";
 
 ```bash
 eksdemo create nodegroup "$NODEGROUP_NAME" \
-    --cluster "$CLUSTER_NAME" \
+    --cluster "$CLUSTER_NAME" \ 
     --nodes 1 \
     --instance "m5.large"
 ```
