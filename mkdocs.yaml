@@ -1,0 +1,97 @@
+site_name: EKS Cluster w/ Secondary CIDR and Karpenter
+repo_url: https://github.com/oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
+repo_name: oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
+
+nav:
+  - Home: README.md
+  - "Ec2 Instance Selector": ec2-instance-selector.md
+  - "Create Load on the Cluster": create-load.md
+  - "Karpenter Configuration": karpenter.md
+  - "EKS Cluster w/ Secondary CIDR": eks-custom-networking-vpc-secondary-cidr.md
+  - "TroubleShooting": troubleshooting.md
+  
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  logo: images/logo.png
+  features:
+    - navigation.tracking
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.tabs.link
+    
+
+  icon:
+    repo: fontawesome/brands/github
+
+  # palette:
+  #   # Palette toggle for light mode
+  #   - scheme: slate
+  #     media: "(prefers-color-scheme: dark)"
+  #     primary: black
+  #     accent: white
+  #     toggle:
+  #       icon: material/weather-sunny
+  #       name: Switch to dark mode
+
+  #   # Palette toggle for dark mode
+  #   - scheme: default
+  #     media: "(prefers-color-scheme: light)"
+  #     primary: black
+  #     accent: white
+  #     toggle:
+  #       icon: material/weather-night
+  #       name: Switch to light mode
+
+markdown_extensions:
+  - tables
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - admonition
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - def_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins:
+  - search
+  - mkdocstrings
+  - autorefs
