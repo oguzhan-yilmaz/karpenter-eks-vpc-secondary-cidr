@@ -1,8 +1,22 @@
 # EKS Custom Newtworking w/ VPC Secondary CIDR
 
+- This configuration **keeps nodes and pods IP addresses in the different CIDR blocks**.
+- AWS VPCs has a default CIDR block, and you can add a secondary CIDR block to the VPC.
+- We will use the secondary CIDR block for the pods, and the default CIDR block for the nodes.
+- Secondary CIDR will have `/19` mask so for 3 subnets we can have available IP count of `3*8190` or `24570` for our pods.
+- This tutorial also includes karpenter configuration for make use of the secondary CIDR block.
 
+## Prerequisites
+- jq
+- eksdemo
+- yq
+- kubectl
+- aws cli 
+
+## Hands-on
 
 ### Export Variables
+
 ```bash
 export AWS_PAGER=""  # disable the aws cli pager 
 export AWS_PROFILE=hepapi
@@ -16,8 +30,7 @@ export AZ3_CIDR="110.64.64.0/19"
 export AZ1="eu-central-1a"
 export AZ2="eu-central-1b"
 export AZ3="eu-central-1c"
-export NODEGROUP_NAME="dodosnodes"
-
+export NODEGROUP_NAME="managed-nodes"
 ```
 
 ### Create eksdemo EKS cluster
