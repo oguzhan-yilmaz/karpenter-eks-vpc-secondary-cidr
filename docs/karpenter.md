@@ -106,6 +106,7 @@ EOF
 #### Check the `.status` of the Karpenter AWSNodeTemplate
 
 - `AWSNodeTemplate` object will update it's `.status` definition with the resolved Subnet and Security Group IDs.
+- Check these IDs to make sure they are correct.
 
 ```bash
 kubectl -n karpenter get awsnodetemplate default -o yaml | yq '.status'
