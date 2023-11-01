@@ -29,6 +29,9 @@
 - Offers troubleshooting steps for common issues.
 - Recommends how to choose EC2 Instance Types. 
 
+## Diagram
+
+![AWS CNI and ENIConfig Diagram](images/secondary-cidr-block-diagram.png)
 
 ## Requirements
 
