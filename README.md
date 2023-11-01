@@ -9,9 +9,14 @@ Docs on creating an EKS setup with Secondary CIDR block for IP addresses.
 - yq
 
 ## Index
+https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/eks-custom-networking-vpc-secondary-cidr/
+- [EKS Custom Networking: VPC with Secondary CIDR](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/eks-custom-networking-vpc-secondary-cidr)
+- [Karpenter Configuration](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/karpenter)
+- [Create Load](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/create-load)
+- [Troubleshooting](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/troubleshooting)
+- [EC2 Instance Selector](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/ec2-instance-selector)
+- [Create Debug Container](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/create-debug-container) 
 
 
 
-### General Notes
 
-- Karpenter uses the price-capacity-optimized strategy. EC2 Fleet identifies the pools with the highest capacity availability for the number of instances that are launching. This means that we will request Spot Instances from the pools that we believe have the lowest chance of interruption in the near term. EC2 Fleet then requests Spot Instances from the lowest priced of these pools.

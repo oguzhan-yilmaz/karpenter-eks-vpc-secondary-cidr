@@ -3,7 +3,7 @@
 - This configuration **keeps nodes and pods IP addresses in the different CIDR blocks**.
 - AWS VPCs has a default CIDR block, and you can add a secondary CIDR block to the VPC.
 - We will use the secondary CIDR block for the pods, and the default CIDR block for the nodes.
-- Secondary CIDR will have `/19` mask so for 3 subnets we can have available IP count of `3*8190` or `24570` for our pods.
+    - Secondary CIDR will have `/19` mask so for 3 subnets we can have available IP count of `3*8190` or `24570` for our pods.
 - This tutorial also includes karpenter configuration for make use of the secondary CIDR block.
 
 ## Prerequisites
@@ -317,6 +317,7 @@ eksdemo create nodegroup "$NODEGROUP_NAME" \
     --nodes 1 \
     --instance "m5.large"
 ```
+
 
 - Terminate the Node Group instances to have them recreated with the new ENI configuration.
 - After you create the Node Group, **check the instances to see if they got their IP Addresses from VPC Secondary CIDR Block**
