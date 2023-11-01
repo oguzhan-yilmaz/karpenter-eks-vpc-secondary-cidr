@@ -35,6 +35,7 @@ export NODEGROUP_NAME="managed-nodes"
 
 ### Create eksdemo EKS cluster
 ```bash
+# this command can take up to 15 minutes to complete
 eksdemo create cluster "$CLUSTER_NAME" \
     --instance "m5.large" \
     --nodes 1 \
@@ -44,7 +45,6 @@ eksdemo create cluster "$CLUSTER_NAME" \
 
 # get the cluster info from eksdemo
 eksdemo get cluster "$CLUSTER_NAME"
-
 
 # make sure to use the correct context
 eksdemo use-context "$CLUSTER_NAME"
@@ -270,7 +270,7 @@ kind: ENIConfig
 metadata:
  name: $AZ1
 spec:
-  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID", "$CLUSTER_SECURITY_GROUP_ID_2"]
+  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID"] # , "$CLUSTER_SECURITY_GROUP_ID_2"
   subnet: "$CUST_SNET1"
 EOF
 
@@ -280,7 +280,7 @@ kind: ENIConfig
 metadata:
  name: $AZ2
 spec:
-  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID", "$CLUSTER_SECURITY_GROUP_ID_2"]
+  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID"]
   subnet: "$CUST_SNET2"
 EOF
 
@@ -290,7 +290,7 @@ kind: ENIConfig
 metadata:
  name: $AZ3
 spec:
-  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID", "$CLUSTER_SECURITY_GROUP_ID_2"]
+  securityGroups: ["$CLUSTER_SECURITY_GROUP_ID"]
   subnet: "$CUST_SNET3"
 EOF
 
@@ -318,8 +318,26 @@ eksdemo create nodegroup "$NODEGROUP_NAME" \
     --instance "m5.large"
 ```
 
+### Restart the Node Group Instances
 
 - Terminate the Node Group instances to have them recreated with the new ENI configuration.
 - After you create the Node Group, **check the instances to see if they got their IP Addresses from VPC Secondary CIDR Block**
 - ![Managed Node EC2 Instance should have ips](images/managed-node-instance-ip-addrs-on-secondary-cidr.png)
 
+
+### Test Pods having IP addresses from Secondary CIDR Block
+
+```bash
+kubectl create deployment nginx --image=nginx
+kubectl scale --replicas=5 deployments/nginx
+kubectl expose deployment/nginx --type=NodePort --port 80
+
+kubectl port-forward svc/nginx 8080:80 &
+# try to see if the pods are running on the secondary CIDR block (ignore daemonset pods)
+kubectl get pods -o wide
+
+curl -Lk localhost:8080
+
+bg # and then+ Ctrl-C
+
+```

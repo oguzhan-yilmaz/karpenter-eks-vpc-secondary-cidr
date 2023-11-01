@@ -1,5 +1,7 @@
 # karpenter-eks-vpc-secondary-cidr
-Docs on creating an EKS setup with Secondary CIDR block for IP addresses.
+
+Docs on creating an EKS setup with Secondary CIDR block for Pod IP addresses. Includes Karpenter configuration. 
+
 
 This repo uses [eksdemo](https://github.com/awslabs/eksdemo) to create an EKS Cluster and install karpenter.
 
