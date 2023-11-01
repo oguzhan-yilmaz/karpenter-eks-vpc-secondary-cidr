@@ -17,9 +17,10 @@ spec:
   restartPolicy: Always
   # nodeName: ip-105-64-46-249.eu-central-1.compute.internal
 EOF
+```bash
 
 
-
+```
 k exec dnsutils -- nslookup kube-dns.kube-system
 k exec dnsutils -- nslookup kubernetes.default
 k exec dnsutils -- nslookup google.com

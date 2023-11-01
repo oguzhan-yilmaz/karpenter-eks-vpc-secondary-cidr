@@ -4,11 +4,11 @@ repo_name: oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
 
 nav:
   - Home: README.md
+  - "EKS Cluster w/ Secondary CIDR": eks-custom-networking-vpc-secondary-cidr.md
+  - "Karpenter Configuration": karpenter.md
+  - "TroubleShooting": troubleshooting.md
   - "Ec2 Instance Selector": ec2-instance-selector.md
   - "Create Load on the Cluster": create-load.md
-  - "Karpenter Configuration": karpenter.md
-  - "EKS Cluster w/ Secondary CIDR": eks-custom-networking-vpc-secondary-cidr.md
-  - "TroubleShooting": troubleshooting.md
   
 theme:
   name: material

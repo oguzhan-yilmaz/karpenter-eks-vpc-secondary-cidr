@@ -35,7 +35,8 @@ Error from server (InternalError): error when creating "STDIN": Internal error o
 
 ### EKS Health Issues
 TODO: here
-https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip
+- You may get this error if you route the Subnets on Secondary CIDR to a Internet Gateway, making it a public subnet.
+- If this is the case, you must enable auto-assign public IP address for the subnet.  
 
 ```bash
 Ec2SubnetInvalidConfiguration
@@ -48,6 +49,15 @@ Ec2SubnetInvalidConfiguration
 kubectl create deployment nginx --image=nginx
 kubectl scale --replicas=3 deployments/nginx
 kubectl expose deployment/nginx --type=NodePort --port 80
+
+
+kubectl port-forward svc/nginx 8080:80 &
+
+curl -Lk localhost:8080
+
+bg # and then+ Ctrl-C
+
+# try to see if the pods are running on the secondary CIDR block (ignore daemonset pods)
 kubectl get pods -o wide
 ```
 
