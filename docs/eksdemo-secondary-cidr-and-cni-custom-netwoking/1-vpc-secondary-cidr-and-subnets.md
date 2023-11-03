@@ -222,3 +222,8 @@ aws ec2 create-tags --resources "$CLUSTER_SECURITY_GROUP_ID" --tags \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=owned"
 
 ```
+
+### Next Steps
+
+- [2. AWS VPC CNI & ENIConfig configuration for Custom Networking](2-aws-vpc-cni-configuration.md)
+- [3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)](3-karpenter-v1alpha-configuration.md)
