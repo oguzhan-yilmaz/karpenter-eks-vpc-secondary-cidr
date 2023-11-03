@@ -1,2 +1,5 @@
 - https://aws.amazon.com/blogs/containers/karpenter-graduates-to-beta/
 - full example yaml files
+    - multi nodeclass strategy
+        - arm and x64 (would require two different nodeclasses)
+        - spot and ondemand (is just fine with one nodeclass)

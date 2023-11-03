@@ -3,6 +3,7 @@
 ## Index
 
 TODO: fix index
+
 - [EKS Custom Networking: VPC with Secondary CIDR](eks-custom-networking-vpc-secondary-cidr.md)
 - [Karpenter Configuration](karpenter-configuration-pre-v0-31.md)
 - [EC2 Instance Selector](ec2-instance-selector.md)
@@ -17,7 +18,7 @@ TODO: fix index
 - Karpenter can be configured to use Spot Instances, which can save a lot of money.
 
 
-## What does this repo do?
+## ENI Custom Networking Demo
 - Creates an EKS Cluster with a VPC with Secondary CIDR block.
     - Secondary CIDR block is a VPC feature that allows you to add additional IP addresses to your VPC.
 - Creates 3 Private subnets in the Secondary CIDR block with `/19` mask, so we can have available IP count of `3*8190` or `24570` for our pods.
@@ -27,7 +28,7 @@ TODO: fix index
 - Offers troubleshooting steps for common issues.
 - Recommends how to choose EC2 Instance Types. 
 
-## Diagram
+### Demo Diagram
 
 ![AWS CNI and ENIConfig Diagram](images/secondary-cidr-block-diagram.png)
 
