@@ -12,8 +12,8 @@ nav:
     - "1. Create VPC with Secondary CIDR and Subnets": eksdemo-secondary-cidr-and-cni-custom-netwoking/1-vpc-secondary-cidr-and-subnets.md
     - "2. AWS VPC CNI & ENIConfig configuration for Custom Networking": eksdemo-secondary-cidr-and-cni-custom-netwoking/2-aws-vpc-cni-configuration.md
     - "3. Karpenter v1alpha Configuration": eksdemo-secondary-cidr-and-cni-custom-netwoking/3-karpenter-v1alpha-configuration.md
-    - "Demo Troubleshooting": eksdemo-secondary-cidr-and-cni-custom-netwoking/troubleshooting.md
     - "Create Load on the Cluster": eksdemo-secondary-cidr-and-cni-custom-netwoking/create-load-on-the-cluster.md
+    - "Demo Troubleshooting": eksdemo-secondary-cidr-and-cni-custom-netwoking/troubleshooting.md
   - "ec2-instance-selector CLI tool": ec2-instance-selector.md
   
 theme:

@@ -3,7 +3,7 @@
 
 ### Export Variables
 
-```bash
+```bash title="Export the variables we will be using throughout the demo"
 export AWS_PAGER=""                          # disable the aws cli pager 
 export AWS_PROFILE=hepapi
 export AWS_REGION=eu-central-1                   
@@ -23,7 +23,7 @@ export NODEGROUP_NAME="main"                 # default is 'main', keep this valu
 
 - Use `eksdemo` to create a PoC EKS cluster.
 
-```bash
+```bash title="Create an EKS Cluster with eksdemo or use your own cluster's context"
 # this command can take up to 15 minutes to complete
 # change the k8s version if you want to
 eksdemo create cluster "$CLUSTER_NAME" \
@@ -67,7 +67,7 @@ echo "EKS Cluster($CLUSTER_NAME) has Security Group ID: ${CLUSTER_SECURITY_GROUP
 
 #### Associate Secondary CIDR Block to VPC
 
-```bash
+```bash 
 echo "\nCurrent Subnets:"
 aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" \
     --query 'Subnets[*].{SubnetId: SubnetId,AvailabilityZone: AvailabilityZone,CidrBlock: CidrBlock}' \
@@ -89,7 +89,7 @@ aws ec2 describe-vpcs --vpc-ids "$VPC_ID" \
 
 Create 3 subnets in the Secondary CIDR block with `/19` mask, so we can have available IP count of `3*8190` or `24570` for our pods.
 
-```bash
+```bash title="Set CUSTOM_SNET{1,2,3} variables if you've already created the subnets"
 # Control the variables before creating the subnets
 echo "Provided Vars (for later export):\nexport AZ1=$AZ1\nexport AZ2=$AZ2\nexport AZ3=$AZ3\nexport AZ1_CIDR=$AZ1_CIDR\nexport AZ2_CIDR=$AZ2_CIDR\nexport AZ3_CIDR=$AZ3_CIDR\n"
 
@@ -100,14 +100,14 @@ export CUST_SNET2=$(aws ec2 create-subnet --cidr-block "$AZ2_CIDR" --vpc-id "$VP
 export CUST_SNET3=$(aws ec2 create-subnet --cidr-block "$AZ3_CIDR" --vpc-id "$VPC_ID" --availability-zone "$AZ3" | jq -r .Subnet.SubnetId)
 
 echo -e "Created Subnets:\nexport CUST_SNET1=$CUST_SNET1 # ($AZ1_CIDR)\nexport CUST_SNET2=$CUST_SNET2 # ($AZ2_CIDR)\nexport CUST_SNET3=$CUST_SNET3 # ($AZ3_CIDR)"
-
 # do this if associated to Public Route table ( or to an internet gateway)
 # Enable auto-assign public IPv4 addresses
 # aws ec2 modify-subnet-attribute --subnet-id "$CUST_SNET1" --map-public-ip-on-launch 
 # aws ec2 modify-subnet-attribute --subnet-id "$CUST_SNET2" --map-public-ip-on-launch 
 # aws ec2 modify-subnet-attribute --subnet-id "$CUST_SNET3" --map-public-ip-on-launch 
+```
 
-
+```bash
 echo "VPC Subnets after Secondary CIDR has been populated with 3 subnets:"
 aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" \
     --query 'Subnets[*].{SubnetId: SubnetId,AvailabilityZone: AvailabilityZone,CidrBlock: CidrBlock}' \
@@ -120,22 +120,21 @@ aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" \
 - Our subnets must have an egress to an `InternetGateway` or a `NatGateway`, so we need to configure the route tables.
 - We will use the auto-generated Route Table for our Secondary CIDR block, and we will add a route to the NAT Gateway.
 
-```bash
+```bash title="You can skip this step if you handled the route table configuration manually"
 # Find the RouteTableID of the main route table
 export MAIN_ROUTE_TABLE_ID=$(aws ec2 describe-route-tables \
     --filters "Name=route.destination-cidr-block,Values=${SECONDARY_CIDR_BLOCK}"  "Name=association.main,Values=true" \
     --query 'RouteTables[].RouteTableId' --output text)
 
 echo "Routes of RouteTable w/ ID: ${MAIN_ROUTE_TABLE_ID:-'MAIN_ROUTE_TABLE_ID variable should have a value of route-table-id, fix before continuing...'}"
+
 aws ec2 describe-route-tables --route-table-ids "$MAIN_ROUTE_TABLE_ID" --query 'RouteTables[].Routes[]' --output table
 
 
-
-# aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET1
-# aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET2
-# aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET3
-
-
+# not really needed, bc aws is smart enough to group our secondary CIDR subnets in a route table
+#   aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET1
+#   aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET2
+#   aws ec2 associate-route-table --route-table-id $MAIN_ROUTE_TABLE_ID --subnet-id $CUST_SNET3
 
 # Find a (the first) NATGW ID in the VPC
 export FIRST_NATGW_ID=$(aws ec2 describe-nat-gateways \
@@ -143,8 +142,9 @@ export FIRST_NATGW_ID=$(aws ec2 describe-nat-gateways \
     --query 'NatGateways[0].NatGatewayId' --output text 2>&1)
 
 echo "Found (first) NATGW ID: ${FIRST_NATGW_ID:-'FIRST_NATGW_ID variable should have a value, fix before continuing...'}"
+```
 
-
+```bash
 # create a route in the MAIN_ROUTE_TABLE_ID and at 0.0.0.0/0 with the FIRST_NATGW_ID. Description: "Route to secondary CIDR block"
 echo "Creating NATGW route in RouteTable(${MAIN_ROUTE_TABLE_ID})"
 natgw_route_has_created=$(aws ec2 create-route \
@@ -160,7 +160,7 @@ aws ec2 describe-route-tables --route-table-ids "$MAIN_ROUTE_TABLE_ID" --query '
 #### Tagging the Resources properly
 
 - `Karpenter AWSNodeTemplate` objects select the Subnets and Security Groups based on the `karpenter.sh/discovery` tag.
-    ```yaml
+    ```yaml title="A fragment of a Karpenter AWSNodeTemplate object"
     kind: AWSNodeTemplate
     spec:
         subnetSelector: 
@@ -174,7 +174,10 @@ aws ec2 describe-route-tables --route-table-ids "$MAIN_ROUTE_TABLE_ID" --query '
     - Private Subnets: `kubernetes.io/role/internal-elb,Value=1`
 
 
-```bash
+```bash title="Find the NodeGroup Subnets and tag them: karpenter.sh/discovery=${CLUSTER_NAME}"
+# We need to keep the original EKS Node Group configuration
+# regarding subnets. Our configuration tries to keep Nodes and Pods
+# in different CIDR blocks, so we need to tag the existing subnets.
 existing_node_group_subnets=$(aws eks describe-nodegroup \
   --cluster-name "${CLUSTER_NAME}" \
   --nodegroup-name "${NODEGROUP_NAME}" \
@@ -183,7 +186,9 @@ existing_node_group_subnets=$(aws eks describe-nodegroup \
   | awk -F'\t' '{for (i = 1; i <= NF; i++) print $i}')
 
 echo "Existing Node Group Subnets: \n${existing_node_group_subnets:-'ERROR: should have existing_node_group_subnets, fix before continuing'}"
+```
 
+```bash title="Do the actual tagging after you've checked the output of the previous command"
 while IFS=$'\t' read -r subnet_id ; do
     # echo "${subnet_id}"
     echo "Tagging Subnet: $subnet_id of EKS Cluster: $CLUSTER_NAME + NodeGroup: $NODEGROUP_NAME"
@@ -194,31 +199,27 @@ done <<< $existing_node_group_subnets
 ```
 
 
-```bash
+```bash title="Tag the Subnets we created for the Secondary CIDR block + Cluster SG"
 # tag the subnets
 aws ec2 create-tags --resources "$CUST_SNET1" --tags \
     "Key=Name,Value=SecondarySubnet-A-${CLUSTER_NAME}" \
     "Key=kubernetes.io/role/internal-elb,Value=1" \
-    "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=shared"
 
 aws ec2 create-tags --resources "$CUST_SNET2" --tags \
     "Key=Name,Value=SecondarySubnet-B-${CLUSTER_NAME}" \
     "Key=kubernetes.io/role/internal-elb,Value=1" \
-    "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=shared"
 
 aws ec2 create-tags --resources "$CUST_SNET3" --tags \
     "Key=Name,Value=SecondarySubnet-C-${CLUSTER_NAME}" \
     "Key=kubernetes.io/role/internal-elb,Value=1" \
-    "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=shared"
 
 # tag Cluster Security Group as well 
 # (NOTE: the tag "kubernetes.io/cluster/${CLUSTER_NAME}=shared" is required and is probably already there)
 aws ec2 create-tags --resources "$CLUSTER_SECURITY_GROUP_ID" --tags \
     "Key=karpenter.sh/discovery,Value=${CLUSTER_NAME}" \
-    "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=owned"
 
 ```
