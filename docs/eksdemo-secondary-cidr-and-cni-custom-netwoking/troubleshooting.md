@@ -10,7 +10,7 @@ alias klogs_aws_node="kubectl logs -f -n kube-system -l k8s-app=aws-node"
 
 ## Debug Cluster DNS
 
-````bash
+```bash
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
@@ -36,7 +36,23 @@ kubectl exec dnsutils -- nslookup google.com
 
 # if karpenter is installed
 kubectl exec dnsutils -- nslookup karpenter.karpenter.svc
-````
+```
+
+### Test Pods having IP addresses from Secondary CIDR Block
+
+```bash
+kubectl create deployment nginx --image=nginx
+kubectl scale --replicas=3 deployments/nginx
+kubectl expose deployment/nginx --type=NodePort --port 80
+
+
+kubectl port-forward svc/nginx 9090:80
+# check localhost:9090 on browser
+
+# try to see if the pods are running on the secondary CIDR block
+# (p.s. ignore daemonset pods or hostNetwork:true pods)
+kubectl get pods -o wide
+```
 
 ### AWS CLI SSM Session Manager
 
@@ -64,20 +80,4 @@ Error from server (InternalError): error when creating "STDIN": Internal error o
 ```bash
 Ec2SubnetInvalidConfiguration
 	One or more Amazon EC2 Subnets of [subnet-00782ed1060ae5f88, subnet-0af9794264f7165bc, subnet-0b974d5872910ab7b] for node group mymymy does not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable auto-assign public IP address for the subnet. See IP addressing in VPC guide: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip
-```
-
-### Test Pods having IP addresses from Secondary CIDR Block
-
-```bash
-kubectl create deployment nginx --image=nginx
-kubectl scale --replicas=3 deployments/nginx
-kubectl expose deployment/nginx --type=NodePort --port 80
-
-
-kubectl port-forward svc/nginx 9090:80
-# check localhost:9090 on browser
-
-# try to see if the pods are running on the secondary CIDR block 
-# (p.s. ignore daemonset pods or hostNetwork:true pods)
-kubectl get pods -o wide
 ```
