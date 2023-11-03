@@ -29,18 +29,21 @@ spec:
 EOF
 
 
-kubectl scale deployment inflate --replicas 2
+kubectl scale deployment inflate --replicas 4
 
 kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter -c controller
 kubectl get nodes
 
-kubectl exec inflate-netshoot-xxxx-yyy -- nslookup
+kubectl exec inflate-netshoot-xxxx-yyy -- nslookup kubernetes.default
 
 kubectl exec -it inflate-netshoot-xxxx-yyy -- /bin/bash
 
 
 # ======== SCALE DOWN
 kubectl scale deployment inflate --replicas 0
+
+# check karpenter logs
 kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter -c controller
+
 kubectl get nodes
 ```

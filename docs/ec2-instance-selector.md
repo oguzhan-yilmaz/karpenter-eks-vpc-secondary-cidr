@@ -8,14 +8,13 @@
 
 ## Installation
 
-- [Visit Github Repo](https://github.com/aws/amazon-ec2-instance-selector)
+- [Visit ec2-instance-selector Github Repo](https://github.com/aws/amazon-ec2-instance-selector)
 
 
 ## AWS Instance Types Summary
 
 | EC2 Instance Type | Optimized For     |
 | ----------------- | ----------------- |
-| t2.micro          | General purpose   |
 | m5.large          | General purpose   |
 | c5.large          | Compute optimized |
 | r5.large          | Memory optimized  |
@@ -23,11 +22,10 @@
 
 ## Example CLI Commands
 
-Export your AWS credentials.
+Export your AWS region.
 
 ```bash
 export AWS_REGION="eu-central-1"
-export AWS_PROFILE="hepapi"
 ```
 
 ### List as table
