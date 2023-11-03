@@ -8,15 +8,6 @@ TODO: fix index
 - [Karpenter Configuration](karpenter-configuration-pre-v0-31.md)
 - [EC2 Instance Selector](ec2-instance-selector.md)
 
-## Why this is needed?
-
-- Running many nodes in EKS can cause IP address exhaustion in the VPC.
-- How many IP addresses are available to a node is determined by nodes ENI capacity.
-    - Because of this, EKS requires running many nodes to keep up with the Pod count.
-- Using a VPC with Secondary CIDR block allows us to have more IP addresses available to our pods.
-- Karpenter is a faster option for cluster autoscaling than the default EKS Cluster Autoscaler.
-- Karpenter can be configured to use Spot Instances, which can save a lot of money.
-
 
 ## ENI Custom Networking Demo
 - Creates an EKS Cluster with a VPC with Secondary CIDR block.

@@ -4,19 +4,19 @@
 ### Export Variables
 
 ```bash
-export AWS_PAGER=""                             # disable the aws cli pager 
+export AWS_PAGER=""                          # disable the aws cli pager 
 export AWS_PROFILE=hepapi
 export AWS_REGION=eu-central-1                   
-export CLUSTER_NAME="tenten"                    # will be created with eksdemo tool
-export CLUSTER_VPC_CIDR="194.151.0.0/16"        # your main EKS Cluster VPC CIDR
-export SECONDARY_CIDR_BLOCK="122.64.0.0/16"     # your secondary CIDR block that will be used for pods
-export AZ1_CIDR="122.64.0.0/19"                 # -> make sure to 
-export AZ2_CIDR="122.64.32.0/19"                # -> use the correct
-export AZ3_CIDR="122.64.64.0/19"                # -> AZ CIDR blocks and masks
+export CLUSTER_NAME="tenten"                 # will be created with eksdemo tool
+export CLUSTER_VPC_CIDR="194.151.0.0/16"     # main EKS Cluster VPC CIDR
+export SECONDARY_CIDR_BLOCK="122.64.0.0/16"  # secondary CIDR block, will be used for pod IPs
+export AZ1_CIDR="122.64.0.0/19"              # -> make sure to 
+export AZ2_CIDR="122.64.32.0/19"             # -> use the correct
+export AZ3_CIDR="122.64.64.0/19"             # -> AZ CIDR blocks and masks
 export AZ1="eu-central-1a"                      
 export AZ2="eu-central-1b"
 export AZ3="eu-central-1c"
-export NODEGROUP_NAME="main"                    # default is 'main', keep this value
+export NODEGROUP_NAME="main"                 # default is 'main', keep this value
 ```
 
 ### Create eksdemo EKS cluster
@@ -183,7 +183,6 @@ existing_node_group_subnets=$(aws eks describe-nodegroup \
   | awk -F'\t' '{for (i = 1; i <= NF; i++) print $i}')
 
 echo "Existing Node Group Subnets: \n${existing_node_group_subnets:-'ERROR: should have existing_node_group_subnets, fix before continuing'}"
-# Use a for loop to iterate through the lines and echo them
 
 while IFS=$'\t' read -r subnet_id ; do
     # echo "${subnet_id}"
@@ -192,11 +191,11 @@ while IFS=$'\t' read -r subnet_id ; do
     "Key=karpenter.sh/discovery,Value=${CLUSTER_NAME}"
 done <<< $existing_node_group_subnets
 
-
 ```
 
 
 ```bash
+# tag the subnets
 aws ec2 create-tags --resources "$CUST_SNET1" --tags \
     "Key=Name,Value=SecondarySubnet-A-${CLUSTER_NAME}" \
     "Key=kubernetes.io/role/internal-elb,Value=1" \
@@ -215,7 +214,8 @@ aws ec2 create-tags --resources "$CUST_SNET3" --tags \
     "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \
     "Key=kubernetes.io/cluster/${CLUSTER_NAME},Value=shared"
 
-
+# tag Cluster Security Group as well 
+# (NOTE: the tag "kubernetes.io/cluster/${CLUSTER_NAME}=shared" is required and is probably already there)
 aws ec2 create-tags --resources "$CLUSTER_SECURITY_GROUP_ID" --tags \
     "Key=karpenter.sh/discovery,Value=${CLUSTER_NAME}" \
     "Key=alpha.eksctl.io/cluster-name,Value=${CLUSTER_NAME}" \

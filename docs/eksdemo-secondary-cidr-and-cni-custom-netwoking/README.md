@@ -7,6 +7,16 @@
 - This tutorial also includes karpenter configuration for make use of the secondary CIDR block.
 - This demo is for pre `v0.32` or `v1alpha` Karpenter version, but should work fine for AWS CNI and ENIConfig.
 
+## Why this is needed?
+
+- Running many nodes in EKS can cause IP address exhaustion in the VPC.
+- How many IP addresses are available to a node is determined by nodes ENI capacity.
+    - Because of this, EKS requires running many nodes to keep up with the Pod count.
+- Using a VPC with Secondary CIDR block allows us to have more IP addresses available to our pods.
+- Karpenter is a faster option for cluster autoscaling than the default EKS Cluster Autoscaler.
+- Karpenter can be configured to use Spot Instances, which can save a lot of money.
+
+
 ## Hands-on Demo
 
 ### Prerequisites
