@@ -1,4 +1,4 @@
-# EKS Custom Newtworking w/ VPC Secondary CIDR Demo
+# Demo: EKS Custom Networking w/ VPC Secondary CIDR block
 
 - This configuration **keeps nodes and pods IP addresses in the different CIDR blocks**.
 - AWS VPCs has a default CIDR block, and you can add a secondary CIDR block to the VPC.
