@@ -118,4 +118,5 @@ kubectl port-forward svc/nginx 8000:80
 ### Next Steps
 
 - [3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)](3-karpenter-v1alpha-configuration.md)
+- [Create a load on the cluster to trigger Karpenter](create-load-on-the-cluster.md)
 - [Demo Troubleshooting](troubleshooting.md)
