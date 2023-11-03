@@ -41,3 +41,7 @@ Following is a full demo that will **configure CNI Custom Networking for EKS**:
 - [2. AWS VPC CNI & ENIConfig configuration for Custom Networking
   ](2-aws-vpc-cni-configuration.md)
 - [3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)](3-karpenter-v1alpha-configuration.md)
+
+### Demo Diagram
+
+![AWS CNI and ENIConfig Diagram](../images/secondary-cidr-block-diagram.png)
