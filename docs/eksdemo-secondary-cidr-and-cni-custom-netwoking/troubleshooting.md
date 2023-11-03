@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-## Helpful bash functions
+### Helpful bash functions
 
 ```bash
 alias klogs_karpenter="kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter"
@@ -8,7 +8,7 @@ alias klogs_coredns="kubectl logs -f -n kube-system deploy/coredns"
 alias klogs_aws_node="kubectl logs -f -n kube-system -l k8s-app=aws-node"
 ```
 
-## Debug Cluster DNS
+### Debug Cluster DNS
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -64,7 +64,7 @@ kubectl get pods -o wide
   aws ssm start-session --target i-061f1a56dfff5d8f3
   ```
 
-#### Error: Address is not allowed
+### Error: Address is not allowed
 
 - You can get the following error if you forget to set `hostNetwork: true` in the Karpenter deployment.
 
