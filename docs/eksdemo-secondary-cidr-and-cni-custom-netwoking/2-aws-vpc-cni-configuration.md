@@ -24,11 +24,11 @@ kubectl rollout restart ds/aws-node -n kube-system
   - `ENIConfig` has the info about which Subnet and Security Groups should be used for the ENI.
   - Our nodes will have their 1st ENI configured with the default VPC CIDR block, and the 2nd ENI will be configured with the Secondary CIDR block.
   - Pods get their IPs from 2nd ENI, and the 1st ENI is used for the node communication.
-  - We will have 1st ENI reserved for pods, and all other ENIs will be used for the pod communication and in the Secondary CIDR block.
+  - We will have 1st ENI reserved for Nodes, and all other ENIs will be used for the pod communication and in the Secondary CIDR block.
 - `AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG=true`:
-  - AWS CNI will use the `ENIConfig` objects which we create to configure the ENIs.
+  - Enables the Custom Network Configuration for AWS CNI. This change will help us to use the secondary CIDR block for the pods.
+  - AWS CNI will use the `ENIConfig` objects to create and configure the ENIs.
   - AWS CNI will look for the label `${ENI_CONFIG_LABEL_DEF}` on the node, and will use the value of that label to find the `ENIConfig` object by name.
-  - This means that we are enabling custom networking on the CNI level. This change will help us to use the secondary CIDR block for the pods.
   - This configuration **requires the existing node EC2 Instances be be restarted to take effect**.
 
 #### More on ENIConfig CRDs

@@ -4,7 +4,7 @@ repo_name: oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
 
 nav:
   - Home: README.md
-  - "Karpenter v1beta(v0.32+)": karpenter-v1beta-configuration.md
+  - "Karpenter v1beta (v0.32+)": karpenter-v1beta-configuration.md
   - "Karpenter v1alpha -> v1beta1 migration": migrate-from-awsnodetemplate-to-nodeclass.md
   - "Multi NodeClass Strategy": multi-nodeclass-strategy.md
   - "Demo: CNI Custom Networking":
