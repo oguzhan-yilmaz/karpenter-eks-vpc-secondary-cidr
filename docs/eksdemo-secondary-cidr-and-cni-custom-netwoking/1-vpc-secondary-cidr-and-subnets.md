@@ -160,7 +160,7 @@ aws ec2 describe-route-tables --route-table-ids "$MAIN_ROUTE_TABLE_ID" --query '
 #### Tagging the Resources properly
 
 - `Karpenter AWSNodeTemplate` objects select the Subnets and Security Groups based on the `karpenter.sh/discovery` tag.
-    ```yaml title="A fragment of a Karpenter AWSNodeTemplate object"
+    ```yaml title="A fragment of a Karpenter AWSNodeTemplate yaml"
     kind: AWSNodeTemplate
     spec:
         subnetSelector: 
@@ -168,11 +168,6 @@ aws ec2 describe-route-tables --route-table-ids "$MAIN_ROUTE_TABLE_ID" --query '
         securityGroupSelector: 
             karpenter.sh/discovery: "${CLUSTER_NAME}"
     ```
-- The tags that start with `kubernetes.io/*` are required, and the ones that start with `alpha.eksctl.io/` are only applied when you create it with eksctl.
-- For `kubernetes.io/role/*` tag, follow the below rules:
-    - Public Subnets: `kubernetes.io/role/elb,Value=1`
-    - Private Subnets: `kubernetes.io/role/internal-elb,Value=1`
-
 
 ```bash title="Find the NodeGroup Subnets and tag them: karpenter.sh/discovery=${CLUSTER_NAME}"
 # We need to keep the original EKS Node Group configuration
@@ -187,6 +182,11 @@ existing_node_group_subnets=$(aws eks describe-nodegroup \
 
 echo "Existing Node Group Subnets: \n${existing_node_group_subnets:-'ERROR: should have existing_node_group_subnets, fix before continuing'}"
 ```
+
+- The tags that start with `kubernetes.io/*` are required.
+- For `kubernetes.io/role/*` tag, follow the below rules:
+    - Public Subnets: `kubernetes.io/role/elb,Value=1`
+    - Private Subnets: `kubernetes.io/role/internal-elb,Value=1`
 
 ```bash title="Do the actual tagging after you've checked the output of the previous command"
 while IFS=$'\t' read -r subnet_id ; do

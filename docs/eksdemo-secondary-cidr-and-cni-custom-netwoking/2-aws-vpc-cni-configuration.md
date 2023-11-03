@@ -50,7 +50,7 @@ kubectl rollout restart ds/aws-node -n kube-system
 
 ### Let's create the ENIConfig objects
 
-- It's very important to use AZ name as the ENIConfig name.
+- It's crucial to use AZ name as the ENIConfig name.
   - This is because the `aws-node` deamonset uses the `ENI_CONFIG_LABEL_DEF` env. var. to match the node label value to the `ENIConfig` name.
 
 ```bash
