@@ -119,3 +119,4 @@ kubectl -n karpenter get awsnodetemplate default -o yaml | yq '.status'
 ### Next Steps
 
 - [Create a load on the cluster to trigger Karpenter](create-load-on-the-cluster.md)
+- [Demo Troubleshooting](troubleshooting.md)

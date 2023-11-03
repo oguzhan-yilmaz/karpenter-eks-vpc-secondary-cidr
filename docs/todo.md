@@ -1,4 +1,5 @@
 - https://aws.amazon.com/blogs/containers/karpenter-graduates-to-beta/
+- v1beta is out
 - full example yaml files
     - multi nodeclass strategy
         - arm and x64 (would require two different nodeclasses)

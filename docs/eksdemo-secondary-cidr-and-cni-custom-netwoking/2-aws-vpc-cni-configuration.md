@@ -4,7 +4,9 @@
 
 ```bash
 # Get the current env vars of aws-node
-kubectl get daemonset aws-node -n kube-system -o jsonpath='{.spec.template.spec.containers[0].env}' | jq -r '.[] | .name + "=" + .value'
+kubectl get daemonset aws-node -n kube-system \
+  -o jsonpath='{.spec.template.spec.containers[0].env}' \
+  | jq -r '.[] | .name + "=" + .value'
 
 # Enable custom network config in aws-node
 kubectl set env daemonset aws-node -n kube-system AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG=true
