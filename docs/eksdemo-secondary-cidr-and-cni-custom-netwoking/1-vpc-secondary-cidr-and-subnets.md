@@ -4,24 +4,28 @@
 ### Export Variables
 
 ```bash
-export AWS_PAGER=""  # disable the aws cli pager 
+export AWS_PAGER=""                             # disable the aws cli pager 
 export AWS_PROFILE=hepapi
-export AWS_REGION=eu-central-1
-export CLUSTER_NAME="tenten"
-export CLUSTER_VPC_CIDR="194.151.0.0/16"
-export SECONDARY_CIDR_BLOCK="122.64.0.0/16"
-export AZ1_CIDR="122.64.0.0/19"
-export AZ2_CIDR="122.64.32.0/19"
-export AZ3_CIDR="122.64.64.0/19"
-export AZ1="eu-central-1a"
+export AWS_REGION=eu-central-1                   
+export CLUSTER_NAME="tenten"                    # will be created with eksdemo tool
+export CLUSTER_VPC_CIDR="194.151.0.0/16"        # your main EKS Cluster VPC CIDR
+export SECONDARY_CIDR_BLOCK="122.64.0.0/16"     # your secondary CIDR block that will be used for pods
+export AZ1_CIDR="122.64.0.0/19"                 # -> make sure to 
+export AZ2_CIDR="122.64.32.0/19"                # -> use the correct
+export AZ3_CIDR="122.64.64.0/19"                # -> AZ CIDR blocks and masks
+export AZ1="eu-central-1a"                      
 export AZ2="eu-central-1b"
 export AZ3="eu-central-1c"
-export NODEGROUP_NAME="managed-nodes"
+export NODEGROUP_NAME="main"                    # default is 'main', keep this value
 ```
 
 ### Create eksdemo EKS cluster
+
+- Use `eksdemo` to create a PoC EKS cluster.
+
 ```bash
 # this command can take up to 15 minutes to complete
+# change the k8s version if you want to
 eksdemo create cluster "$CLUSTER_NAME" \
     --instance "m5.large" \
     --nodes 1 \
@@ -44,6 +48,9 @@ kubectl get nodes -o wide
 ### Create Secondary VPC CIDR
 
 #### Export VPC Info
+
+- We need to export VPC related info to use in the following steps.
+
 ```bash
 export VPC_ID=$(aws eks describe-cluster --name "$CLUSTER_NAME" --query "cluster.resourcesVpcConfig.vpcId" --output text)
 
@@ -59,6 +66,7 @@ echo "EKS Cluster($CLUSTER_NAME) has Security Group ID: ${CLUSTER_SECURITY_GROUP
 ```
 
 #### Associate Secondary CIDR Block to VPC
+
 ```bash
 echo "\nCurrent Subnets:"
 aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" \
@@ -78,6 +86,9 @@ aws ec2 describe-vpcs --vpc-ids "$VPC_ID" \
 ```
 
 #### Create Subnets in the Secondary CIDR Block
+
+Create 3 subnets in the Secondary CIDR block with `/19` mask, so we can have available IP count of `3*8190` or `24570` for our pods.
+
 ```bash
 # Control the variables before creating the subnets
 echo "Provided Vars (for later export):\nexport AZ1=$AZ1\nexport AZ2=$AZ2\nexport AZ3=$AZ3\nexport AZ1_CIDR=$AZ1_CIDR\nexport AZ2_CIDR=$AZ2_CIDR\nexport AZ3_CIDR=$AZ3_CIDR\n"
@@ -90,7 +101,7 @@ export CUST_SNET3=$(aws ec2 create-subnet --cidr-block "$AZ3_CIDR" --vpc-id "$VP
 
 echo -e "Created Subnets:\nexport CUST_SNET1=$CUST_SNET1 # ($AZ1_CIDR)\nexport CUST_SNET2=$CUST_SNET2 # ($AZ2_CIDR)\nexport CUST_SNET3=$CUST_SNET3 # ($AZ3_CIDR)"
 
-# do this if associated to Public Route table
+# do this if associated to Public Route table ( or to an internet gateway)
 # Enable auto-assign public IPv4 addresses
 # aws ec2 modify-subnet-attribute --subnet-id "$CUST_SNET1" --map-public-ip-on-launch 
 # aws ec2 modify-subnet-attribute --subnet-id "$CUST_SNET2" --map-public-ip-on-launch 
@@ -105,6 +116,10 @@ aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" \
 
 
 #### Route Table Configuration
+
+- Our subnets must have an egress to an `InternetGateway` or a `NatGateway`, so we need to configure the route tables.
+- We will use the auto-generated Route Table for our Secondary CIDR block, and we will add a route to the NAT Gateway.
+
 ```bash
 # Find the RouteTableID of the main route table
 export MAIN_ROUTE_TABLE_ID=$(aws ec2 describe-route-tables \

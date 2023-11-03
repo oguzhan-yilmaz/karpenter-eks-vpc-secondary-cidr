@@ -1,17 +1,19 @@
-# 3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)
+# 3. Karpenter `v1alpha` Configuration (Provider & AWSNodeTemplate)
 
-- This configuration is for Karpenter `v0.31.0` and below.
+- This configuration is for Karpenter `v1alpha` versions (or `v0.31.0` and below).
 - Check out: [Migrate from AWSNodeTemplate to NodeClass](../migrate-from-awsnodetemplate-to-nodeclass.md) if you wish to upgrade `v0.32.0` and above.
 
 ### Install Karpenter
 
 ```bash
+# NOTE: if you're planning to use Karpenter v1alpha and below, 
+#       you should use an option to specify Karpenter version <= v0.31
+#       in this eksdemo command
+
 eksdemo install autoscaling-karpenter \
     --cluster "$CLUSTER_NAME" \
-    --set "hostNetwork=true,"
+    --set "hostNetwork=true"
 
-kubectl -n karpenter get provisioners default -o yaml
-kubectl -n karpenter get awsnodetemplate default -o yaml
 ```
 
 ### Karpenter Configuration
@@ -112,3 +114,8 @@ EOF
 ```bash
 kubectl -n karpenter get awsnodetemplate default -o yaml | yq '.status'
 ```
+
+
+### Next Steps
+
+- [Create a load on the cluster to trigger Karpenter](create-load-on-the-cluster.md)
