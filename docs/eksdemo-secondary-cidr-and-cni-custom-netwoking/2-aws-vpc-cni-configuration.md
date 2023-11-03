@@ -119,4 +119,3 @@ kubectl port-forward svc/nginx 8000:80
 
 - [3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)](3-karpenter-v1alpha-configuration.md)
 - [Demo Troubleshooting](troubleshooting.md)
-troubleshooting.md
