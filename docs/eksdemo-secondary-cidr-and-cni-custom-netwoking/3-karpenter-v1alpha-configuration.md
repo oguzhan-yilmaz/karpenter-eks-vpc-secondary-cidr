@@ -1,31 +1,33 @@
-# Karpenter Installation and Configuration
+# 3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)
 
-
+- This configuration is for Karpenter `v0.31.0` and below.
+- Check out: [Migrate from AWSNodeTemplate to NodeClass](../migrate-from-awsnodetemplate-to-nodeclass.md) if you wish to upgrade `v0.32.0` and above.
 
 ### Install Karpenter
+
 ```bash
 eksdemo install autoscaling-karpenter \
     --cluster "$CLUSTER_NAME" \
     --set "hostNetwork=true,"
 
-kubectl -n karpenter get provisioners default -o yaml 
-kubectl -n karpenter get awsnodetemplate default -o yaml 
+kubectl -n karpenter get provisioners default -o yaml
+kubectl -n karpenter get awsnodetemplate default -o yaml
 ```
-
 
 ### Karpenter Configuration
 
 - Let's delete the default karpenter config (note: important to delete them beforehand)
 
 ```bash
-kubectl -n karpenter get provisioners default -o yaml 
-kubectl -n karpenter get awsnodetemplate default -o yaml 
+kubectl -n karpenter get provisioners default -o yaml
+kubectl -n karpenter get awsnodetemplate default -o yaml
 
 # delete default ones
 kubectl delete provisioners default
 kubectl delete awsnodetemplate default
 
 ```
+
 #### Create Karpenter Provisioner
 
 ```bash
@@ -66,7 +68,7 @@ EOF
 
 #### Create Karpenter AWSNodeTemplate
 
-- Your 
+-
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -77,16 +79,16 @@ metadata:
 spec:
   subnetSelector:
     # should be the primary cidr block subnets
-    karpenter.sh/discovery: "${CLUSTER_NAME}"       
-  securityGroupSelector: 
     karpenter.sh/discovery: "${CLUSTER_NAME}"
-  amiFamily: "AL2"               
+  securityGroupSelector:
+    karpenter.sh/discovery: "${CLUSTER_NAME}"
+  amiFamily: "AL2"
   userData: |
     #!/bin/bash
     echo "Running custom user data script"
-    sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm            
-    sudo systemctl status amazon-ssm-agent  
-  tags: 
+    sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+    sudo systemctl status amazon-ssm-agent
+  tags:
     dev.corp.net/app: ExampleTag
     karpenter.sh/discovery: "${CLUSTER_NAME}"
     Name: "Karpenter-Node-${CLUSTER_NAME}"
@@ -98,10 +100,9 @@ spec:
         volumeType: gp3
         encrypted: true
   # optional, configures detailed monitoring for the instance
-  # detailedMonitoring: "..."      
+  # detailedMonitoring: "..."
 EOF
 ```
-
 
 #### Check the `.status` of the Karpenter AWSNodeTemplate
 

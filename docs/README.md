@@ -2,12 +2,10 @@
 
 ## Index
 
+TODO: fix index
 - [EKS Custom Networking: VPC with Secondary CIDR](eks-custom-networking-vpc-secondary-cidr.md)
-- [Karpenter Configuration](karpenter.md)
-- [Create Load](create-load.md)
-- [Troubleshooting](troubleshooting.md)
+- [Karpenter Configuration](karpenter-configuration-pre-v0-31.md)
 - [EC2 Instance Selector](ec2-instance-selector.md)
-- [Create Debug Container](create-debug-container.md) 
 
 ## Why this is needed?
 
@@ -33,14 +31,7 @@
 
 ![AWS CNI and ENIConfig Diagram](images/secondary-cidr-block-diagram.png)
 
-## Requirements
-
-- eksdemo
-- aws cli 
-- jq
-- yq
-- AWS Account + CLI credentials
 
 ## General Notes
 
-- Karpenter uses the price-capacity-optimized strategy. EC2 Fleet identifies the pools with the highest capacity availability for the number of instances that are launching. This means that we will request Spot Instances from the pools that we believe have the lowest chance of interruption in the near term. EC2 Fleet then requests Spot Instances from the lowest priced of these pools.
+- 

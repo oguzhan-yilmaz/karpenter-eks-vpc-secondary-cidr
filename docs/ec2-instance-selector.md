@@ -50,7 +50,7 @@ ec2-instance-selector \
     --gpus 0 \
     --usage-class spot \
     --network-interfaces-min 2 \
-    --disk-type ssd \n
+    --disk-type ssd \
     --cpu-architecture "x86_64" \
     -o interactive
 ```

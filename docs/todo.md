@@ -1,0 +1,2 @@
+- https://aws.amazon.com/blogs/containers/karpenter-graduates-to-beta/
+- full example yaml files

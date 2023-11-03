@@ -28,28 +28,21 @@ spec:
   restartPolicy: Always
   # nodeName: ip-105-64-46-249.eu-central-1.compute.internal
 EOF
-```bash
 
-
-```bash
+# try to resolve cluster DNS from the pod
 kubectl exec dnsutils -- nslookup kube-dns.kube-system
 kubectl exec dnsutils -- nslookup kubernetes.default
 kubectl exec dnsutils -- nslookup google.com
 
-
-kubectl exec dnsutils -- dig kubernetes.default | grep SERVER
-kubectl exec dnsutils -- dig kubernetes.default @kube-dns.kube-system | grep SERVER
-
 # if karpenter is installed
 kubectl exec dnsutils -- nslookup karpenter.karpenter.svc
-
 ````
 
 ### AWS CLI SSM Session Manager
 
 - [Install AWS CLI SSM Session Manager Plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
 - EC2 instance must have SSM Agent installed (possibly in userdata)
-- Connect to EC2 instance via SSM Session Manager, or you can use the AWS Console UI
+- Connect to EC2 instance via SSM Session Manager, or you can use the AWS Console UI.
   ```bash
   # you can SSH into the Karpenter nodes like this
   aws ssm start-session --target i-061f1a56dfff5d8f3
@@ -57,7 +50,7 @@ kubectl exec dnsutils -- nslookup karpenter.karpenter.svc
 
 #### Error: Address is not allowed
 
-- You can get the following error if you forget to set `hostNetwork: true` in the karpenter deployment.
+- You can get the following error if you forget to set `hostNetwork: true` in the Karpenter deployment.
 
 ```bash
 Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "defaulting.webhook.karpenter.k8s.aws": failed to call webhook: Post "https://karpenter.karpenter.svc:8443/default/karpenter.k8s.aws?timeout=10s": Address is not allowed
@@ -81,12 +74,10 @@ kubectl scale --replicas=3 deployments/nginx
 kubectl expose deployment/nginx --type=NodePort --port 80
 
 
-kubectl port-forward svc/nginx 8080:80 &
+kubectl port-forward svc/nginx 9090:80
+# check localhost:9090 on browser
 
-curl -Lk localhost:8080
-
-bg # and then+ Ctrl-C
-
-# try to see if the pods are running on the secondary CIDR block (ignore daemonset pods)
+# try to see if the pods are running on the secondary CIDR block 
+# (p.s. ignore daemonset pods or hostNetwork:true pods)
 kubectl get pods -o wide
 ```
