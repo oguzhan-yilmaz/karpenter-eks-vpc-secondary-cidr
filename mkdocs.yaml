@@ -1,14 +1,14 @@
-site_name: EKS Cluster w/ Secondary CIDR and Karpenter
+site_name: EKS CNI Custom Networking and Karpenter
 repo_url: https://github.com/oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
 repo_name: oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
 
 nav:
   - Home: README.md
   - "Karpenter v1beta(v0.32+)": karpenter-v1beta-configuration.md
-  - "Migrate from AWSNodeTemplate to NodeClass (a.k.a. v1beta1 Migration)": migrate-from-awsnodetemplate-to-nodeclass.md
+  - "Karpenter v1alpha -> v1beta1 migration": migrate-from-awsnodetemplate-to-nodeclass.md
   - "Multi NodeClass Strategy": multi-nodeclass-strategy.md
-  - "Full Demo":
-    - "0. About the Demo": eksdemo-secondary-cidr-and-cni-custom-netwoking/README.md
+  - "Demo: CNI Custom Networking":
+    - "About the Demo": eksdemo-secondary-cidr-and-cni-custom-netwoking/README.md
     - "1. Create VPC with Secondary CIDR and Subnets": eksdemo-secondary-cidr-and-cni-custom-netwoking/1-vpc-secondary-cidr-and-subnets.md
     - "2. AWS VPC CNI & ENIConfig configuration for Custom Networking": eksdemo-secondary-cidr-and-cni-custom-netwoking/2-aws-vpc-cni-configuration.md
     - "3. Karpenter v1alpha Configuration": eksdemo-secondary-cidr-and-cni-custom-netwoking/3-karpenter-v1alpha-configuration.md
@@ -41,6 +41,7 @@ theme:
   features:
     - navigation.tracking
     - navigation.instant
+    - navigation.expand
     - search.suggest
     - search.highlight
     - search.share
