@@ -7,7 +7,7 @@
 - This tutorial also includes karpenter configuration for make use of the secondary CIDR block.
 - This demo is for pre `v0.32` or `v1alpha` Karpenter version, but should work fine for AWS CNI and ENIConfig.
 
-## Why this is needed?
+## Why is this needed?
 
 - Running many nodes in EKS can cause IP address exhaustion in the VPC.
 - How many IP addresses are available to a node is determined by nodes ENI capacity.

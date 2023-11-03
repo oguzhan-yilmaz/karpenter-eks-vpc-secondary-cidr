@@ -18,7 +18,7 @@ This repo uses [eksdemo](https://github.com/awslabs/eksdemo) to create an EKS Cl
 
 
 
-## Why this is needed?
+## Why is this needed?
 
 - Running many nodes in EKS can cause IP address exhaustion in the VPC.
 - How many IP addresses are available to a node is determined by nodes ENI capacity.
