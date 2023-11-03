@@ -11,6 +11,8 @@ kubectl set env daemonset aws-node -n kube-system AWS_VPC_K8S_CNI_CUSTOM_NETWORK
 
 kubectl set env daemonset aws-node -n kube-system ENI_CONFIG_LABEL_DEF=topology.kubernetes.io/zone
 
+# restart aws eni controller
+kubectl rollout restart ds/aws-node -n kube-system
 ```
 
 #### Environment Variables Explained
@@ -29,7 +31,7 @@ kubectl set env daemonset aws-node -n kube-system ENI_CONFIG_LABEL_DEF=topology.
   - This means that we are enabling custom networking on the CNI level. This change will help us to use the secondary CIDR block for the pods.
   - This configuration **requires the existing node EC2 Instances be be restarted to take effect**.
 
-#### ENIConfig k8s CRDs
+#### More on ENIConfig CRDs
 
 - ENIConfig CRD is used by AWS CNI to create ENIs with the specified configuration for that Availability Zone.
 - The deamonset `aws-node` has env. var. called `ENI_CONFIG_LABEL_DEF`, and it is used to match
@@ -47,6 +49,9 @@ kubectl set env daemonset aws-node -n kube-system ENI_CONFIG_LABEL_DEF=topology.
   - For example, if the label value is `eu-west-1a`, AWS CNI will use the `ENIConfig` named `eu-west-1a`.
 
 ### Let's create the ENIConfig objects
+
+- It's very important to use AZ name as the ENIConfig name.
+  - This is because the `aws-node` deamonset uses the `ENI_CONFIG_LABEL_DEF` env. var. to match the node label value to the `ENIConfig` name.
 
 ```bash
 cat << EOF | kubectl apply -f -
@@ -87,8 +92,12 @@ kubectl get eniconfig ${AZ3} -o yaml; echo "---";
 ### Restart the Node Group Instances
 
 - Terminate the Node Group instances to have them recreated with the new ENI configuration.
+  - Node should get it's primary ENI from the default VPC CIDR block, and the secondary ENI(and any other) from the Secondary CIDR block.
+  - This is because we have configured the ENIConfig objects to use the Secondary CIDR block subnets.
 - After you create the Node Group, **check the instances to see if they got their IP Addresses from VPC Secondary CIDR Block**
-- ![Managed Node EC2 Instance should have ips](../images/managed-node-instance-ip-addrs-on-secondary-cidr.png)
+- You should be seeing 1st ENI with IP from the default VPC CIDR block, and others from the Secondary CIDR block.
+    - ![Managed Node EC2 Instance should have ips](../images/managed-node-instance-ip-addrs-on-secondary-cidr.png)
+
 
 ### Test Pods having IP addresses from Secondary CIDR Block
 
