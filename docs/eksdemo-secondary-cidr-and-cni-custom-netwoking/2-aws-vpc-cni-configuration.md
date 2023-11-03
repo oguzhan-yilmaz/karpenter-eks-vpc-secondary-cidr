@@ -94,7 +94,7 @@ kubectl get eniconfig ${AZ3} -o yaml; echo "---";
 - Terminate the Node Group instances to have them recreated with the new ENI configuration.
   - Node should get it's primary ENI from the default VPC CIDR block, and the secondary ENI(and any other ENIs) from the Secondary CIDR block.
   - This is because we have configured the ENIConfig objects to use the Secondary CIDR block subnets.
-- After you create the Node Group, **check the instances to see if they got their IP Addresses from VPC Secondary CIDR Block**
+- After you recreate the Node instances, **check the instances to see if they got their IP Addresses from VPC Secondary CIDR Block**
 - You should be seeing 1st ENI with IP from the default VPC CIDR block, and others from the Secondary CIDR block
   - ![Managed Node EC2 Instance should have ips](../images/managed-node-instance-ip-addrs-on-secondary-cidr.png)
 
@@ -118,3 +118,5 @@ kubectl port-forward svc/nginx 8000:80
 ### Next Steps
 
 - [3. Karpenter v1alpha Configuration (Provider & AWSNodeTemplate)](3-karpenter-v1alpha-configuration.md)
+- [Demo Troubleshooting](troubleshooting.md)
+troubleshooting.md
