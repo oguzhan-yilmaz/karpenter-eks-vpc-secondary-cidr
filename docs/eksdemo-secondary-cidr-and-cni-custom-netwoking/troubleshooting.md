@@ -1,5 +1,15 @@
 # Troubleshooting Guide
 
+### Find which resources are tagged with `karpenter.sh/discovery=${CLUSTER_NAME}`
+
+```bash
+# List all resources with the tag: Key=karpenter.sh/discovery,Values=${CLUSTER_NAME}
+aws resourcegroupstaggingapi get-resources \
+    --tag-filters "Key=karpenter.sh/discovery,Values=${CLUSTER_NAME}" \
+    --query 'ResourceTagMappingList[]' --output text \
+    | sed 's/arn:/\n----------\narn:/g'
+```
+
 ### Helpful bash functions
 
 ```bash
