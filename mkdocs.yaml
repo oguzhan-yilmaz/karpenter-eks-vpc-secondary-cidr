@@ -4,10 +4,10 @@ repo_name: oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr
 
 nav:
   - Home: README.md
-  - "Karpenter v1beta (v0.32+)": karpenter-v1beta-configuration.md
-  - "Karpenter v1alpha -> v1beta1 migration": migrate-from-awsnodetemplate-to-nodeclass.md
-  - "Multi NodeClass Strategy": multi-nodeclass-strategy.md
-  - "Demo: CNI Custom Networking":
+  # - "Karpenter v1beta (v0.32+)": karpenter-v1beta-configuration.md
+  # - "Karpenter v1alpha -> v1beta1 migration": migrate-from-awsnodetemplate-to-nodeclass.md
+  # - "Multi NodeClass Strategy": multi-nodeclass-strategy.md
+  - "Demo: AWS VPC CNI Custom Networking":
     - "About the Demo": eksdemo-secondary-cidr-and-cni-custom-netwoking/README.md
     - "1. Create VPC with Secondary CIDR and Subnets": eksdemo-secondary-cidr-and-cni-custom-netwoking/1-vpc-secondary-cidr-and-subnets.md
     - "2. AWS VPC CNI & ENIConfig configuration for Custom Networking": eksdemo-secondary-cidr-and-cni-custom-netwoking/2-aws-vpc-cni-configuration.md

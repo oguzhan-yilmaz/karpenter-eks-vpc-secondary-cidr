@@ -2,11 +2,15 @@
 
 ## Index
 
-TODO: fix index
 
-- [EKS Custom Networking: VPC with Secondary CIDR](eks-custom-networking-vpc-secondary-cidr.md)
-- [Karpenter Configuration](karpenter-configuration-pre-v0-31.md)
-- [EC2 Instance Selector](ec2-instance-selector.md)
+- **Demo: AWS VPC CNI Custom Networking**
+    - [About the Demo](eksdemo-secondary-cidr-and-cni-custom-netwoking/README.md)
+    - [1. Create VPC with Secondary CIDR and Subnets]()
+    - [2. AWS VPC CNI & ENIConfig configuration for Custom Networking](eksdemo-secondary-cidr-and-cni-custom-netwoking/2-aws-vpc-cni-configuration.md)
+    - [3. Karpenter v1alpha Configuration](eksdemo-secondary-cidr-and-cni-custom-netwoking/3-karpenter-v1alpha-configuration.md)
+    - [Demo Troubleshooting](eksdemo-secondary-cidr-and-cni-custom-netwoking/troubleshooting.md)
+- [ec2-instance-selector CLI tool](ec2-instance-selector.md)
+
 
 
 ## ENI Custom Networking Demo
@@ -25,7 +29,3 @@ TODO: fix index
 
 ![AWS CNI and ENIConfig Diagram](images/secondary-cidr-block-diagram.png)
 
-
-## General Notes
-
-- 

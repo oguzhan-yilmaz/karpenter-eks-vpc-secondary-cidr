@@ -7,7 +7,7 @@
 export AWS_PAGER=""                          # disable the aws cli pager 
 export AWS_PROFILE=hepapi
 export AWS_REGION=eu-central-1                   
-export CLUSTER_NAME="tenten"                 # will be created with eksdemo tool
+export CLUSTER_NAME="miyazaki"                 # will be created with eksdemo tool
 export CLUSTER_VPC_CIDR="194.151.0.0/16"     # main EKS Cluster VPC CIDR
 export SECONDARY_CIDR_BLOCK="122.64.0.0/16"  # secondary CIDR block, will be used for pod IPs
 export AZ1_CIDR="122.64.0.0/19"              # -> make sure to 
@@ -28,7 +28,7 @@ export NODEGROUP_NAME="main"                 # default is 'main', keep this valu
 # change the k8s version if you want to
 eksdemo create cluster "$CLUSTER_NAME" \
     --instance "m5.large" \
-    --nodes 1 \
+    --nodes 2 \
     --version "1.24" \
     --os "AmazonLinux2" \
      --vpc-cidr "$CLUSTER_VPC_CIDR"

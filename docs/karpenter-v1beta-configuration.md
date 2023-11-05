@@ -6,6 +6,15 @@ https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh
 - https://github.com/awslabs/amazon-eks-ami/blob/master/log-collector-script/linux/README.md
   - collect logs of userdata + kubelet???
 
+
+
+
+
+
+
+
+
+
 ## Installation
 
 ```bash title="Export env. variables we will use in this demo"
@@ -14,7 +23,23 @@ export K8S_VERSION=1.24
 export AWS_PAGER=""                          # disable the aws cli pager
 export AWS_PROFILE=hepapi
 export AWS_REGION=eu-central-1
-export CLUSTER_NAME="bambi"                 # will be created with eksctl
+export CLUSTER_NAME="miyazaki"                 # will be created with eksctl
+```
+
+### new one
+```bash title="Export env. variables we will use in this demo"
+
+eksdemo create cluster "$CLUSTER_NAME" \
+    --instance "m5.large" \
+    --nodes 2 \
+    --version "$K8S_VERSION" \
+    --os "AmazonLinux2"
+
+
+eksdemo install autoscaling-karpenter \
+    --cluster "$CLUSTER_NAME" \
+    --version "$KARPENTER_VERSION" \
+    --set "hostNetwork=true," 
 ```
 
 ### Create an EKS cluster with Karpenter
@@ -79,6 +104,15 @@ aws sqs get-queue-attributes \
     --queue-url "https://sqs.${AWS_REGION}.amazonaws.com/${ACCOUNT_ID}/${CLUSTER_NAME}" \
     --attribute-names ApproximateNumberOfMessages --no-cli-pager --query 'Attributes'
 ```
+
+### Create 
+
+```bash title=""
+
+
+
+```
+
 
 ### Scale up the cluster
 

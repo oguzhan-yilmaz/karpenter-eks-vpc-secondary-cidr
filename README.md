@@ -9,12 +9,15 @@ This repo uses [eksdemo](https://github.com/awslabs/eksdemo) to create an EKS Cl
 
 ## Index
 
-- [EKS Custom Networking: VPC with Secondary CIDR](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/eks-custom-networking-vpc-secondary-cidr)
-- [Karpenter Configuration](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/karpenter)
-- [Create Load](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/create-load)
-- [Troubleshooting](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/troubleshooting)
-- [EC2 Instance Selector](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/ec2-instance-selector)
-- [Create Debug Container](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/create-debug-container) 
+- **Demo: AWS VPC CNI Custom Networking**
+    - [About the Demo](eksdemo-secondary-cidr-and-cni-custom-netwoking/README.md)
+    - [1. Create VPC with Secondary CIDR and Subnets]()
+    - [2. AWS VPC CNI & ENIConfig configuration for Custom Networking](eksdemo-secondary-cidr-and-cni-custom-netwoking/2-aws-vpc-cni-configuration.md)
+    - [3. Karpenter v1alpha Configuration](eksdemo-secondary-cidr-and-cni-custom-netwoking/3-karpenter-v1alpha-configuration.md)
+    - [Demo Troubleshooting](eksdemo-secondary-cidr-and-cni-custom-netwoking/troubleshooting.md)
+- [ec2-instance-selector CLI tool](ec2-instance-selector.md)
+
+
 
 
 
