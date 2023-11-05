@@ -6,14 +6,12 @@ This repo uses [eksdemo](https://github.com/awslabs/eksdemo) to create an EKS Cl
 
 ### [Go to Documentation Website](https://oguzhan-yilmaz.github.io/karpenter-eks-vpc-secondary-cidr/)
 
-## Demo: AWS VPC CNI Custom Networking
+## Complete Demo: AWS VPC CNI Custom Networking
 
-### About
 - Creates an EKS Cluster with a VPC with Secondary CIDR block.
   - Secondary CIDR block is a VPC feature that allows you to add additional IP addresses to your VPC.
-  - We want to use the secondary CIDR block for the pods, and the default CIDR block of the VPC for the nodes.
-  - Thus defeating the IP Exhaustion problem.
-- Creates 3 Private subnets in the Secondary CIDR block with `/19` mask, so we can have available IP count of `3*8190` or `24570` for our pods.
+  - We will to use the secondary CIDR block for the pods, and the primary CIDR block of the VPC for the nodes.
+- Creates 3 Private subnets in the Secondary CIDR block with `/19` mask, so we can have available IP count of `3*8190=24570` for our pods.
 - Updates `aws-node` with Custom Networking configuration.
 - Creates ENIConfig for each of our subnets in the Secondary CIDR block.
 - Creates Karpenter Provisioner and AWSNodeTemplate.
@@ -38,10 +36,7 @@ This repo uses [eksdemo](https://github.com/awslabs/eksdemo) to create an EKS Cl
 - Karpenter is a faster option for cluster autoscaling than the default EKS Cluster Autoscaler.
 - Karpenter can be configured to use Spot Instances, which can save a lot of money.
 
-## What does this repo do?
 
-
-
-## Diagram
+### CNI Config Diagram
 
 ![AWS CNI and ENIConfig Diagram](https://github.com/oguzhan-yilmaz/karpenter-eks-vpc-secondary-cidr/blob/main/docs/images/secondary-cidr-block-diagram.png?raw=true)
